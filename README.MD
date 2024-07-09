@@ -1,6 +1,6 @@
 # Nombre del Proyecto
 
-Descripción corta del proyecto.
+E-COMMERCE BACKEND CODER
 
 ## Tabla de Contenidos
 
@@ -10,8 +10,8 @@ Descripción corta del proyecto.
 4. [Instalación](#instalación)
 5. [Uso](#uso)
 6. [Endpoints API](#endpoints-api)
-7. [Contribución](#contribución)
-8. [Licencia](#licencia)
+
+
 
 ## Introducción
 
@@ -28,22 +28,25 @@ Breve introducción sobre el proyecto y su propósito.
 
 Explicación de la estructura de directorios del proyecto:
 
+<pre>
 /
 ├── src/
-│ ├── data/
-│ │ ├── productos.json
-│ │ └── carritos.json
-│ ├── public/
-│ │ └── index.html
-│ ├── routes/
-│ │ ├── products.router.js
-│ │ └── carts.router.js
-│ └── utils/
-│ ├── products_utils.js
-│ └── carts_utils.js
+│   ├── data/
+│   │   ├── productos.json
+│   │   └── carritos.json
+│   ├── public/
+│   │   └── index.html
+│   ├── routes/
+│   │   ├── products.router.js
+│   │   └── carts.router.js
+│   └── utils/
+│       ├── products_utils.js
+│       └── carts_utils.js
 ├── app.js
 ├── package.json
 └── README.md
+</pre>
+
 
 - `/src`: Directorio principal para el código fuente.
 - `/src/data`: Archivos JSON para almacenar productos y carritos.
@@ -55,8 +58,7 @@ Explicación de la estructura de directorios del proyecto:
 
 1. Clonar el repositorio:
 
-   ```bash
-  git@github.com:Mtofalo22/backend-coder-70065.git
+   ```bash git@github.com:Mtofalo22/backend-coder-70065.git
    
    
 ## Endpoints API
@@ -77,14 +79,4 @@ Explicación de la estructura de directorios del proyecto:
 - **DELETE /api/carts/:cid/product/:pid**: Eliminar un producto de un carrito por ID.
 - **DELETE /api/carts/:cid**: Eliminar un carrito por ID.
 
-### Contribución
-
-Describe cómo otros desarrolladores pueden contribuir a tu proyecto:
-
-- Forkear el proyecto.
-- Clonar el repositorio forkeado.
-- Crear una nueva rama (`git checkout -b feature/nueva-funcionalidad`).
-- Commit de los cambios (`git commit -am 'Agrega nueva funcionalidad'`).
-- Push a la rama (`git push origin feature/nueva-funcionalidad`).
-- Abrir un Pull Request.
 
