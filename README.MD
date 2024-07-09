@@ -56,28 +56,35 @@ Explicación de la estructura de directorios del proyecto:
 1. Clonar el repositorio:
 
    ```bash
-   git clone https://github.com/tu-usuario/tu-proyecto.git
+  git@github.com:Mtofalo22/backend-coder-70065.git
    
    
-Endpoints API
-Productos
-GET /api/products: Listar todos los productos.
-GET /api/products/:pid: Obtener un producto por ID.
-POST /api/products: Crear un nuevo producto.
-PUT /api/products/:pid: Actualizar un producto existente por ID.
-DELETE /api/products/:pid: Eliminar un producto por ID.
-Carritos
-POST /api/carts: Crear un nuevo carrito.
-GET /api/carts/:cid: Obtener productos de un carrito por ID.
-POST /api/carts/:cid/product/:pid: Agregar un producto a un carrito por ID.
-DELETE /api/carts/:cid/product/:pid: Eliminar un producto de un carrito por ID.
-DELETE /api/carts/:cid: Eliminar un carrito por ID.
-Contribución
-Describe cómo otros desarrolladores pueden contribuir a tu proyecto.
+## Endpoints API
 
-Forkear el proyecto.
-Clonar el repositorio forkeado.
-Crear una nueva rama (git checkout -b feature/nueva-funcionalidad).
-Commit de los cambios (git commit -am 'Agrega nueva funcionalidad').
-Push a la rama (git push origin feature/nueva-funcionalidad).
-Abrir un Pull Request.
+### Productos
+
+- **GET /api/products**: Listar todos los productos.
+- **GET /api/products/:pid**: Obtener un producto por ID.
+- **POST /api/products**: Crear un nuevo producto.
+- **PUT /api/products/:pid**: Actualizar un producto existente por ID.
+- **DELETE /api/products/:pid**: Eliminar un producto por ID.
+
+### Carritos
+
+- **POST /api/carts**: Crear un nuevo carrito.
+- **GET /api/carts/:cid**: Obtener productos de un carrito por ID.
+- **POST /api/carts/:cid/product/:pid**: Agregar un producto a un carrito por ID.
+- **DELETE /api/carts/:cid/product/:pid**: Eliminar un producto de un carrito por ID.
+- **DELETE /api/carts/:cid**: Eliminar un carrito por ID.
+
+### Contribución
+
+Describe cómo otros desarrolladores pueden contribuir a tu proyecto:
+
+- Forkear el proyecto.
+- Clonar el repositorio forkeado.
+- Crear una nueva rama (`git checkout -b feature/nueva-funcionalidad`).
+- Commit de los cambios (`git commit -am 'Agrega nueva funcionalidad'`).
+- Push a la rama (`git push origin feature/nueva-funcionalidad`).
+- Abrir un Pull Request.
+
