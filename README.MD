@@ -13,10 +13,6 @@ E-COMMERCE BACKEND CODER
 
 
 
-## Introducción
-
-Breve introducción sobre el proyecto y su propósito.
-
 ## Tecnologías Utilizadas
 
 - Node.js

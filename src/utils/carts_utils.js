@@ -55,7 +55,7 @@ export async function getCartById(cartId) {
     }
   }
   
-  // Función para eliminar un producto del carrito
+  
   export async function deleteProductFromCart(cartId, productId) {
     try {
       let data = await fs.readFile('src/data/carritos.json', 'utf-8');

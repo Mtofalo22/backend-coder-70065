@@ -23,7 +23,6 @@ const guardarCarritos = (carritos) => {
   writeFileSync(cartsFilePath, JSON.stringify(carritos, null, 2));
 };
 
-// Ruta raíz POST: crear un nuevo carrito
 router.post('/', (req, res) => {
   const newCart = {
     id: uuidv4(),
@@ -35,7 +34,6 @@ router.post('/', (req, res) => {
   res.status(201).json(newCart);
 });
 
-// Ruta GET /:cid: listar los productos de un carrito por id
 router.get('/:cid', (req, res) => {
   const carritos = leerCarritos();
   const carrito = carritos.find(c => c.id === req.params.cid);
@@ -46,7 +44,6 @@ router.get('/:cid', (req, res) => {
   }
 });
 
-// Ruta POST /:cid/product/:pid: agregar un producto a un carrito
 router.post('/:cid/product/:pid', (req, res) => {
   const { pid } = req.params;
   const carritos = leerCarritos();
