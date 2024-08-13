@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import Product from '../models/product.model.js'; // Asegúrate de que esta ruta sea correcta
+import Product from '../models/product.model.js'; 
 
 const router = Router();
 
@@ -39,6 +39,8 @@ router.get('/', async (req, res) => {
   } catch (err) {
       res.status(500).render('error', { error: err.message });
   }
+  guardarProductos(newProducts);
+  res.status(204).send();
 });
 
 export default router;
