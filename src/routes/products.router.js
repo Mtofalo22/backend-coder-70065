@@ -39,8 +39,7 @@ router.get('/', async (req, res) => {
   } catch (err) {
       res.status(500).render('error', { error: err.message });
   }
-  guardarProductos(newProducts);
-  res.status(204).send();
+  
 });
 
 export default router;
