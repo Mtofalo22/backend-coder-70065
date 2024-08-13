@@ -1,0 +1,46 @@
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carrito de Compras</title>
+  </head>
+  <body>
+    <h1>Carrito de Compras</h1>
+    {{#if cart.length}}
+      <ul>
+        {{#each cart}}
+          <li>
+            <strong>{{this.product.title}}</strong> - ${{this.product.price}}
+            <br />
+            Cantidad: {{this.quantity}}
+            <br />
+            Subtotal: ${{this.subtotal}}
+            <br />
+            <form
+              action="/cart/products/add/{{this.product._id}}"
+              method="post"
+              style="display:inline;"
+            >
+              <button type="submit">Agregar Más</button>
+            </form>
+            <form
+              action="/cart/products/delete/{{this.product._id}}"
+              method="post"
+              style="display:inline;"
+            >
+              <button type="submit">Eliminar</button>
+            </form>
+          </li>
+        {{/each}}
+      </ul>
+
+      <h2>Total a pagar: ${{total}}</h2>
+
+      <form action="/cart/products/delete" method="post">
+        <button type="submit">Vaciar Carrito</button>
+      </form>
+    {{else}}
+      <p>El carrito está vacío. <a href="/home">Volver a la tienda</a></p>
+    {{/if}}
+  </body>
+</html>

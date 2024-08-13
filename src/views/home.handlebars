@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <script>
+        async function addToCart(productId) {
+            try {
+                const response = await fetch(`/cart/products/add/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                if (response.ok) {
+                    console.log('Producto agregado al carrito');
+                } else {
+                    alert('Error al agregar el producto al carrito');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al agregar el producto al carrito');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Lista de Productos</h1>
+
+     <form action="/home" method="get">
+        <label for="category">Categoría:</label>
+        <select name="query" id="category">
+            <option value="">Todas</option>
+            <option value="category=Iluminación">Iluminación</option>
+            <option value="category=Repuestos">Repuestos</option>
+            <option value="category=Sonido">Sonido</option>
+            <option value="category=Mantenimiento">Mantenimiento</option>
+            <option value="category=Suspensión">Suspensión</option>
+            <option value="category=Repuesto motor">Repuesto motor</option>
+        </select>
+
+        <label for="sort">Ordenar por precio:</label>
+        <select name="sort" id="sort">
+            <option value="">Ninguno</option>
+            <option value="asc">Ascendente</option>
+            <option value="desc">Descendente</option>
+        </select>
+
+        <button type="submit">Aplicar</button>
+    </form>
+    <ul>
+        {{#each products}}
+        <li>
+            <strong>{{this.title}}</strong> - ${{this.price}}
+            <br> Categoría: {{this.category}}
+            <br> {{#if this.available}}Stock disponible: {{this.stock}}{{else}}No disponible{{/if}}
+            <button onclick="addToCart('{{this._id}}')">Agregar al Carrito</button>
+        </li>
+        {{/each}}
+    </ul>
+
+    <div class="pagination">
+        {{#if hasPrevPage}}
+            <a href="{{prevLink}}">« Página Anterior</a>
+        {{/if}}
+       
+        Página {{currentPage}} de {{totalPages}}
+
+        {{#if hasNextPage}}
+            <a href="{{nextLink}}">Página Siguiente »</a>
+        {{/if}}
+    </div>
+</body>
+</html>

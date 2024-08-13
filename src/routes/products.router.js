@@ -1,43 +1,43 @@
 import { Router } from 'express';
-import { getProducts, getProductById, addProduct, updateProduct, deleteProduct } from '../utils/products_utils.js';
+import Product from '../models/product.model.js'; // Asegúrate de que esta ruta sea correcta
 
 const router = Router();
 
-router.get('/', (req, res) => {
-  const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
-  const products = getProducts(limit);
-  res.json(products);
-});
+router.get('/', async (req, res) => {
+  const { limit = 5, page = 1, sort, query } = req.query;
 
-router.get('/:pid', (req, res) => {
-  const product = getProductById(req.params.pid);
-  if (product) {
-    res.json(product);
-  } else {
-    res.status(404).json({ error: 'Product not found' });
+  let filter = {};
+  if (query) {
+      const queryParts = query.split('=');
+      if (queryParts.length === 2 && queryParts[0] === 'category') {
+          filter.category = { $regex: queryParts[1], $options: 'i' };
+      } else if (queryParts.length === 2 && queryParts[0] === 'status') {
+          filter.status = queryParts[1] === 'true';
+      }
   }
-});
 
-router.post('/', (req, res) => {
-  const newProduct = addProduct(req.body);
-  res.status(201).json(newProduct);
-});
+  const options = {
+      page: parseInt(page, 10),
+      limit: parseInt(limit, 10),
+      sort: sort ? { price: sort === 'asc' ? 1 : -1 } : {}
+  };
 
-router.put('/:pid', (req, res) => {
-  const updatedProduct = updateProduct(req.params.pid, req.body);
-  if (updatedProduct) {
-    res.json(updatedProduct);
-  } else {
-    res.status(404).json({ error: 'Product not found' });
-  }
-});
+  try {
+      const result = await Product.paginate(filter, options);
 
-router.delete('/:pid', (req, res) => {
-  const isDeleted = deleteProduct(req.params.pid);
-  if (isDeleted) {
-    res.json({ message: 'Product deleted' });
-  } else {
-    res.status(404).json({ error: 'Product not found' });
+      res.render('home', {
+          products: result.docs,
+          totalPages: result.totalPages,
+          prevPage: result.prevPage,
+          nextPage: result.nextPage,
+          currentPage: result.page,
+          hasPrevPage: result.hasPrevPage,
+          hasNextPage: result.hasNextPage,
+          prevLink: result.hasPrevPage ? `/home?page=${result.prevPage}&limit=${limit}&sort=${sort}&query=${query}` : null,
+          nextLink: result.hasNextPage ? `/home?page=${result.nextPage}&limit=${limit}&sort=${sort}&query=${query}` : null
+      });
+  } catch (err) {
+      res.status(500).render('error', { error: err.message });
   }
 });
 

@@ -1,37 +1,41 @@
-import fs from 'fs';
-import path from 'path';
 import fs from 'fs/promises';
+import path from 'path';
 
 const filePath = path.resolve('src/data/carritos.json');
 
 let carritos = [];
 
-const leerCarritos = () => {
-  if (fs.existsSync(filePath)) {
-    const data = fs.readFileSync(filePath, 'utf-8');
-    carritos = JSON.parse(data);
+const leerCarritos = async () => {
+  try {
+    if (await fs.stat(filePath)) {
+      const data = await fs.readFile(filePath, 'utf-8');
+      carritos = JSON.parse(data);
+    }
+  } catch (error) {
+    // Archivo no encontrado o error al leer
+    carritos = [];
   }
 };
 
-const guardarCarritos = () => {
-  fs.writeFileSync(filePath, JSON.stringify(carritos, null, 2));
+const guardarCarritos = async () => {
+  await fs.writeFile(filePath, JSON.stringify(carritos, null, 2));
 };
 
-export const createCart = () => {
-  leerCarritos();
+export const createCart = async () => {
+  await leerCarritos();
   const newCart = { id: Date.now().toString(), products: [] };
   carritos.push(newCart);
-  guardarCarritos();
+  await guardarCarritos();
   return newCart;
 };
 
-export const getCartById = (cid) => {
-  leerCarritos();
+export const getCartById = async (cid) => {
+  await leerCarritos();
   return carritos.find(cart => cart.id === cid);
 };
 
-export const addProductToCart = (cid, pid) => {
-  leerCarritos();
+export const addProductToCart = async (cid, pid) => {
+  await leerCarritos();
   const cart = carritos.find(cart => cart.id === cid);
   if (!cart) return null;
   const productIndex = cart.products.findIndex(product => product.id === pid);
@@ -40,39 +44,31 @@ export const addProductToCart = (cid, pid) => {
   } else {
     cart.products[productIndex].quantity += 1;
   }
-  guardarCarritos();
+  await guardarCarritos();
   return cart;
 };
 
-export async function getCartById(cartId) {
-    try {
-      const data = await fs.readFile('src/data/carritos.json', 'utf-8');
-      const carts = JSON.parse(data);
-      const cart = carts.find(cart => cart.id === cartId);
-      return cart;
-    } catch (error) {
-      throw new Error('Error reading cart data');
+export const deleteProductFromCart = async (cartId, productId) => {
+  try {
+    await leerCarritos();
+    const cartIndex = carritos.findIndex(cart => cart.id === cartId);
+
+    if (cartIndex === -1) {
+      throw new Error('Cart not found');
     }
-  }
-  
-  // Función para eliminar un producto del carrito
-  export async function deleteProductFromCart(cartId, productId) {
-    try {
-      let data = await fs.readFile('src/data/carritos.json', 'utf-8');
-      let carts = JSON.parse(data);
-      const cartIndex = carts.findIndex(cart => cart.id === cartId);
-  
-      if (cartIndex === -1) {
-        throw new Error('Cart not found');
-      }
-  
-      const updatedProducts = carts[cartIndex].products.filter(product => product.id !== productId);
-      carts[cartIndex].products = updatedProducts;
-  
-      await fs.writeFile('src/data/carritos.json', JSON.stringify(carts, null, 2), 'utf-8');
-  
-      return carts[cartIndex];
-    } catch (error) {
-      throw new Error('Error deleting product from cart');
+
+    const updatedProducts = carritos[cartIndex].products.filter(product => product.id !== productId);
+    carritos[cartIndex].products = updatedProducts;
+
+    // Eliminar el carrito si está vacío
+    if (carritos[cartIndex].products.length === 0) {
+      carritos.splice(cartIndex, 1);
     }
+
+    await guardarCarritos();
+
+    return carritos[cartIndex];
+  } catch (error) {
+    throw new Error('Error deleting product from cart');
   }
+};
