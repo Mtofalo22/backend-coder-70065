@@ -6,7 +6,11 @@ import exphbs from 'express-handlebars';
 import productsRouter from './src/routes/products.router.js';
 import cartsRouter from './src/routes/carts.router.js';
 import viewsRouter from './src/routes/views.router.js';
+import usersRouter from './src/routes/users.router.js'
 import methodOverride from 'method-override';
+import passport from 'passport';
+import isAuthenticated from './src/config/passport.js'; 
+import cookieParser from 'cookie-parser';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,6 +31,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'src', 'public')));
 app.use(methodOverride('_method'));
+app.use(cookieParser());
+app.use(passport.initialize());
+
 
 app.engine('handlebars', exphbs.engine({
   defaultLayout: 'main',
@@ -42,6 +49,7 @@ app.use('/home', productsRouter)
 app.use('/products', productsRouter);
 app.use('/cart', cartsRouter);
 app.use('/', viewsRouter);
+app.use('/api/users', usersRouter);
 
 app.use(methodOverride('_method'));
 
