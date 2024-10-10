@@ -9,8 +9,8 @@ import viewsRouter from './src/routes/views.router.js';
 import usersRouter from './src/routes/users.router.js'
 import methodOverride from 'method-override';
 import passport from 'passport';
-import isAuthenticated from './src/config/passport.js'; 
 import cookieParser from 'cookie-parser';
+import './src/config/passport.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -50,6 +50,7 @@ app.use('/products', productsRouter);
 app.use('/cart', cartsRouter);
 app.use('/', viewsRouter);
 app.use('/api/users', usersRouter);
+
 
 app.use(methodOverride('_method'));
 

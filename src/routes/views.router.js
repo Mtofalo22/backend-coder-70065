@@ -2,7 +2,6 @@ import { Router } from 'express';
 import Product from '../models/product.model.js';
 import Cart from '../models/cart.model.js';
 import isAuthenticated from '../config/passport.js'; 
-import passport from 'passport';
 
 const router = Router();
 
@@ -71,8 +70,8 @@ router.get('/login', (req, res) => {
   res.render('login');
 });
 
-// Ruta para la vista de perfil (Protegida)
-router.get("/auth/profile", passport.authenticate('jwt', { session: false }), (req, res) => {
+// Ruta para la vista de perfil
+router.get("/auth/profile", isAuthenticated, (req, res) => {
   res.render("profile", { user: req.user });
 });
 
