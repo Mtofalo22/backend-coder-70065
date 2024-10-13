@@ -5,11 +5,13 @@ import { UserRepository } from "../repositories/user.repository.js";
 import { SECRET_KEY } from "../config/config.js";
 import isAuthenticated from "../config/passport.js";
 import { UserDTO } from "../dao/DTOs/user.dto.js";
+import Product from "../models/product.model.js";
+import { isAdmin, isUser } from "../middlewares/authorization.js"; 
 
 const router = express.Router();
 const userRepository = new UserRepository();
 
-// Ruta para registro
+
 router.post("/register", async (req, res) => {
   try {
     const { first_name, last_name, email, age, password } = req.body;
@@ -24,7 +26,7 @@ router.post("/register", async (req, res) => {
     };
 
     const createdUser = await userRepository.createUser(newUser);
-    const userDTO = new UserDTO(createdUser); 
+    const userDTO = new UserDTO(createdUser);
 
     res.status(201).json({ message: "User registered successfully", user: userDTO });
   } catch (error) {
@@ -36,7 +38,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Ruta para iniciar sesión
+
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -68,19 +70,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-
-
-router.get("/current", isAuthenticated, async (req, res) => {
-  
-  try {
-    const userDTO = new UserDTO(req.user); 
-    res.json(userDTO); 
-  } catch (error) {
-    res.status(500).json({ error: "Error fetching user data" });
-  }
-});
-
-// Ruta para cerrar sesión
 router.get("/logout", (req, res) => {
   res.clearCookie("jwt"); 
   res.redirect("/login"); 

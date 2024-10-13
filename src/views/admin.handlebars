@@ -1,0 +1,52 @@
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/html" href="src/public/css/styles.css" />
+    <title>Administración de Productos</title>
+  </head>
+  <body>
+    <h1>Gestión de Productos</h1>
+
+    <h2>Agregar Producto</h2>
+    <form action="/products" method="POST">
+      <input type="text" name="title" placeholder="Título" required />
+      <input
+        type="text"
+        name="description"
+        placeholder="Descripción"
+        required
+      />
+      <input type="number" name="price" placeholder="Precio" required />
+      <input type="text" name="category" placeholder="Categoría" required />
+      <input type="number" name="stock" placeholder="Stock" required />
+      <button type="submit">Agregar Producto</button>
+    </form>
+
+    <h2>Productos Existentes</h2>
+    <div class="card-container">
+      {{#each products}}
+        <div class="card">
+          <div class="card-header">
+            <h3>{{this.title}}</h3>
+          </div>
+          <div class="card-body">
+            <p><strong>Descripción:</strong> {{this.description}}</p>
+            <p><strong>Precio:</strong> ${{this.price}}</p>
+            <p><strong>Categoría:</strong> {{this.category}}</p>
+            <p><strong>Stock:</strong> {{this.stock}}</p>
+          </div>
+          <div class="card-footer">
+            <a href="/admin/products/{{this.id}}/edit" class="btn">Editar</a>
+              <form action="/products/delete/{{this.id}}" method="POST" style="display:inline;">
+              <button type="submit" class="btn btn-delete">Eliminar</button>
+            </form>
+          </div>
+        </div>
+      {{else}}
+        <p>No hay productos disponibles.</p>
+      {{/each}}
+    </div>
+
+  </body>
+</html>

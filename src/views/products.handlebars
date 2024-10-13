@@ -1,25 +1,32 @@
-<!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/html" href="src/public/css/styles.css" />
     <title>Productos</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Lista de Productos</h1>
     <ul>
-        {{#each products}}
+      {{#each products}}
         <li>
-            <strong>{{this.title}}</strong> - {{this.price}} USD
-            <br> Categoría: {{this.category}}
-            <br> Disponibilidad: {{#if this.available}}Disponible{{else}}No disponible{{/if}}
-            <br><a href="/products/{{this._id}}">Ver Detalles</a>
+          <strong>{{this.title}}</strong>
+          -
+          {{this.price}}
+          USD
+          <br />
+          Categoría:
+          {{this.category}}
+          <br />
+          Disponibilidad:
+          {{#if this.available}}Disponible{{else}}No disponible{{/if}}
+          <br /><a href="/products/{{this._id}}">Ver Detalles</a>
         </li>
-        {{/each}}
+      {{/each}}
     </ul>
     <div>
-        {{#if hasPrevPage}}<a href="{{prevLink}}">Anterior</a>{{/if}}
-        {{#if hasNextPage}}<a href="{{nextLink}}">Siguiente</a>{{/if}}
+      {{#if hasPrevPage}}<a href="{{prevLink}}">Anterior</a>{{/if}}
+      {{#if hasNextPage}}<a href="{{nextLink}}">Siguiente</a>{{/if}}
     </div>
-</body>
+  </body>
 </html>

@@ -2,6 +2,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/html" href="src/public/css/styles.css">
     <title>{{title}}</title>
   </head>
   <body>
@@ -9,11 +10,18 @@
       <h1>Bienvenido a la Tienda de Repuestos</h1>
       <nav>
         <ul>
-          <li><a href="/login">Iniciar sesión</a></li>
-          <li><a href="/auth/profile">Perfil usuario</a></li>
-          <li><a href="/register">Registrate</a></li>
-          <li><a href="/home">Productos</a></li>
-          <li><a href="/cart">Carrito de Compras</a></li>
+          {{#if user}}
+            <li><a href="/auth/profile">Perfil usuario</a></li>
+            <li><a href="/api/users/logout">Cerrar sesión</a></li>
+            <li><a href="/home">Productos</a></li>
+            <li><a href="/cart">Carrito de Compras</a></li>
+          {{else}}
+            <li><a href="/login">Iniciar sesión</a></li>
+            <li><a href="/register">Registrate</a></li>
+            <li><a href="/home">Productos</a></li>
+            <li><a href="/cart">Carrito de Compras</a></li>
+          {{/if}}
+                   
         </ul>
       </nav>
     </header>

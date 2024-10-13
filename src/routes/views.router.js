@@ -1,11 +1,17 @@
 import { Router } from 'express';
 import Product from '../models/product.model.js';
 import Cart from '../models/cart.model.js';
-import isAuthenticated from '../config/passport.js'; 
+import isAuthenticated from '../config/passport.js';
+import { isAdmin, isUser } from "../middlewares/authorization.js"; 
 
 const router = Router();
 
-// Ruta para la vista de inicio (home)
+
+router.use((req, res, next) => {
+  res.locals.user = req.user || null;
+  next();
+});
+
 router.get('/home', async (req, res) => {
   const { limit = 5, page = 1, sort = '', query = '' } = req.query;
 
@@ -43,36 +49,57 @@ router.get('/home', async (req, res) => {
       nextLink: result.hasNextPage
         ? `/home?page=${result.nextPage}&limit=${limit}&sort=${sort}&query=${query}`
         : null,
+      user: req.user  
     });
   } catch (err) {
     res.status(500).send('Error', { error: err.message });
   }
 });
 
-// Ruta para la vista de carrito
-router.get('/cart', async (req, res) => {
+router.get('/cart', isAuthenticated, isUser, async (req, res) => {
   try {
     const cart = await Cart.findOne().populate('products.product');
-    res.render('cart', { cart: cart ? cart.products : [] });
+    res.render('cart', { cart: cart ? cart.products : [], user: req.user });  
   } catch (error) {
     console.error(error);
     res.status(500).send('Error al obtener el carrito');
   }
 });
 
-// Ruta para la vista de registro
 router.get('/register', (req, res) => {
-  res.render('register');
+  res.render('register', { user: req.user });  
 });
 
-// Ruta para la vista de login
 router.get('/login', (req, res) => {
-  res.render('login');
+  res.render('login', { user: req.user });  
 });
 
-// Ruta para la vista de perfil
 router.get("/auth/profile", isAuthenticated, (req, res) => {
   res.render("profile", { user: req.user });
+});
+
+router.get("/admin", isAuthenticated, isAdmin, async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.render("admin", { products, user: req.user });
+  } catch (error) {
+    res.status(500).json({ error: "Error al recuperar productos" });
+  }
+});
+
+router.get("/admin/products/:id/edit", isAuthenticated, isAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).render("error", { message: "Producto no encontrado" });
+    }
+
+    res.render("editproduct", { product, user: req.user });
+  } catch (error) {
+    res.status(500).render("error", { message: "Error al cargar el producto" });
+  }
 });
 
 export default router;

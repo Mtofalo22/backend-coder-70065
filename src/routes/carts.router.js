@@ -4,7 +4,7 @@ import Product from '../models/product.model.js';
 
 const router = Router();
 
-// Obtener el carrito
+
 router.get('/', async (req, res) => {
   try {
     let cart = await Cart.findOne().populate('products.product');
@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Agregar producto al carrito
+
 router.post('/products/add/:pid', async (req, res) => {
   try {
     const { pid } = req.params;
@@ -67,7 +67,7 @@ router.post('/products/add/:pid', async (req, res) => {
   }
 });
 
-// Eliminar producto del carrito
+
 router.post('/products/delete/:pid', async (req, res) => {
   try {
     const { pid } = req.params;
@@ -107,23 +107,6 @@ router.post('/products/delete/:pid', async (req, res) => {
   }
 });
 
-// Vaciar carrito
-router.post('/products/delete/', async (req, res) => {
-  try {
-    const cart = await Cart.findOne();
 
-    if (!cart) {
-      return res.status(404).send('Carrito no encontrado');
-    }
-
-    // Eliminar el carrito de la base de datos
-    await Cart.deleteOne({ _id: cart._id });
-
-    res.redirect('/cart');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Error al vaciar el carrito');
-  }
-});
 
 export default router;
