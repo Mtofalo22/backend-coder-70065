@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true, required: true },
   age: { type: Number, required: true },
   password: { type: String, required: true },
-  cart: { type: String, default: 'generic_cart_id' },
+  cart: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' },
   role: { type: String, default: 'user' }
 }, { collection: 'users' }); 
 

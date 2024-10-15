@@ -12,7 +12,7 @@ const leerCarritos = async () => {
       carritos = JSON.parse(data);
     }
   } catch (error) {
-    // Archivo no encontrado o error al leer
+    
     carritos = [];
   }
 };
@@ -60,7 +60,7 @@ export const deleteProductFromCart = async (cartId, productId) => {
     const updatedProducts = carritos[cartIndex].products.filter(product => product.id !== productId);
     carritos[cartIndex].products = updatedProducts;
 
-    // Eliminar el carrito si está vacío
+    
     if (carritos[cartIndex].products.length === 0) {
       carritos.splice(cartIndex, 1);
     }

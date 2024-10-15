@@ -57,7 +57,7 @@
             <strong>{{this.title}}</strong> - ${{this.price}}
             <br> Categoría: {{this.category}}
             <br> {{#if this.available}}Stock disponible: {{this.stock}}{{else}}No disponible{{/if}}
-            <button onclick="addToCart('{{this._id}}')">Agregar al Carrito</button>
+            <button onclick="addToCart('{{this.id}}')">Agregar al Carrito</button>
         </li>
         {{/each}}
     </ul>

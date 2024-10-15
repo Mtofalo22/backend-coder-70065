@@ -48,7 +48,7 @@ app.engine('handlebars', exphbs.engine({
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'src', 'views'));
 
-app.use('/home', productsRouter)
+
 app.use('/products', productsRouter);
 app.use('/cart', cartsRouter);
 app.use('/', viewsRouter);

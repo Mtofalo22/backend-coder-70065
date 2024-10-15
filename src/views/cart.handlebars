@@ -18,28 +18,32 @@
             Subtotal: ${{this.subtotal}}
             <br />
             <form
-              action="/cart/products/add/{{this.product._id}}"
+              action="/cart/products/add/{{this.product.id}}"
               method="post"
-              style="display:inline;"
-            >
+              style="display:inline;">
               <button type="submit">Agregar Más</button>
             </form>
+
             <form
-              action="/cart/products/delete/{{this.product._id}}"
+              action="/cart/products/delete/{{this.product.id}}"
               method="post"
-              style="display:inline;"
-            >
+              style="display:inline;">
               <button type="submit">Eliminar</button>
-            </form>
+            </form>  
           </li>
         {{/each}}
       </ul>
 
       <h2>Total a pagar: ${{total}}</h2>
 
+      <form action="/cart/{{user.cart}}/purchase" method="post">
+        <button type="submit">Finalizar Compra</button>
+      </form>
+
       <form action="/cart/products/delete" method="post">
         <button type="submit">Vaciar Carrito</button>
       </form>
+      
     {{else}}
       <p>El carrito está vacío. <a href="/home">Volver a la tienda</a></p>
     {{/if}}
