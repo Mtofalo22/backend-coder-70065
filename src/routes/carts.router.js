@@ -6,6 +6,7 @@ import Ticket from "../models/ticket.model.js";
 import isAuthenticated from "../config/passport.js";
 import { isAdmin, isUser } from "../middlewares/authorization.js";
 import { v4 as uuidv4 } from "uuid";
+import { sendPurchaseEmail } from "../services/mailer.js";
 
 const router = Router();
 
@@ -146,11 +147,29 @@ router.post("/products/delete/:pid", isAuthenticated, isUser, async (req, res) =
   }
 );
 
+router.post('/products/delete', isAuthenticated, isUser, async (req, res) => {
+  try {
+    const user = req.user;
+    const cart = await Cart.findById(user.cart);
+
+    if (!cart) {
+      return res.status(404).send('Carrito no encontrado');
+    }
+
+    cart.products = [];
+    await cart.save();
+
+    res.redirect('/cart');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al vaciar el carrito');
+  }
+});
+
 router.post('/:cid/purchase', isAuthenticated, isUser, async (req, res) => {
   try {
     const { cid } = req.params;
-    
-    
+
     const cart = await Cart.findById(cid).populate('products.product');
     
     if (!cart) {
@@ -159,37 +178,49 @@ router.post('/:cid/purchase', isAuthenticated, isUser, async (req, res) => {
 
     const productsNotProcessed = [];
     let totalAmount = 0;
+    const purchasedProducts = [];
 
-    
-    for (const cartItem of cart.products) {
+     for (const cartItem of cart.products) {
       const product = cartItem.product;
       const quantityInCart = cartItem.quantity;
-
       
       if (product.stock >= quantityInCart) {
         product.stock -= quantityInCart;
         await product.save();
 
         totalAmount += product.price * quantityInCart;
+
+        purchasedProducts.push({
+          product: product.title,
+          quantity: quantityInCart,
+          price: product.price
+        });
+
       } else {
         productsNotProcessed.push(product.id);
       }
     }
-
+   
     cart.products = cart.products.filter(cartItem => productsNotProcessed.includes(cartItem.product.id));
     await cart.save();
-
+    
     if (totalAmount > 0) {
       const ticket = new Ticket({
         code: uuidv4(),
         purchase_datetime: new Date(),
         amount: totalAmount,
-        purchaser: req.user.email
+        purchaser: req.user.email,
+        products: purchasedProducts
       });
 
       await ticket.save();
+      
+      await sendPurchaseEmail(req.user.email, {
+        products: purchasedProducts,
+        total: totalAmount
+      });
     }
-    
+
     if (productsNotProcessed.length > 0) {
       return res.status(200).json({
         message: 'Compra realizada parcialmente',
@@ -203,4 +234,5 @@ router.post('/:cid/purchase', isAuthenticated, isUser, async (req, res) => {
     res.status(500).send('Error al finalizar la compra');
   }
 });
+
 export default router;
